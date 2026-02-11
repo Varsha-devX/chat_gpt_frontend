@@ -3,15 +3,33 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-        <div>
-            <nav style={{ padding: '1rem', backgroundColor: '#333', marginBottom: '1rem' }}>
-        <Link to="/" style={{ color: 'white', marginRight: '1rem' }}>Home</Link>
-        <Link to="/about" style={{ color: 'white', marginRight: '1rem' }}>About</Link>
-        <Link to="/contact" style={{ color: 'white', marginRight: '1rem' }}>Contact  </Link>
-        <Link to="/login" style={{ color: 'white', marginRight: '1rem' }}>Login  </Link>
-        <Link to="/signup" style={{ color: 'white', marginRight: '1rem' }}>Signup  </Link>
-      </nav>
-        </div>
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                {/* Logo */}
+                <div className="flex-shrink-0 flex items-center">
+                    <Link to="/" className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+                        ChatApp
+                    </Link>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="hidden md:flex items-center space-x-8">
+                    <Link to="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-200">Home</Link>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-200">About</Link>
+                    <Link to="/contact" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-200">Contact</Link>
+                </div>
+
+                {/* Auth Buttons */}
+                <div className="flex items-center space-x-4">
+                    <Link to="/login" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-200 hidden sm:block">
+                        Log in
+                    </Link>
+                    <Link to="/signup" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md">
+                        Sign up
+                    </Link>
+                </div>
+            </nav>
+        </header>
     );
 };
 
