@@ -24,12 +24,16 @@ const Login = () => {
 
       const data = await response.json();
 
-      // Store tokens in localStorage
+      // Store tokens and user info in localStorage
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('refresh_token', data.refresh_token);
       localStorage.setItem('token_type', data.token_type);
+      localStorage.setItem('user_email', data.email);
+      localStorage.setItem('user_id', data.user_id);
 
       console.log('Login successful:', data);
+
+
 
       // Redirect or update UI after login
       window.location.href = '/dashboard'; // Example redirect
