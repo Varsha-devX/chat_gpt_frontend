@@ -32,7 +32,7 @@ const Dashboard = () => {
 
             if (userId) {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/history/${userId}`);
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/history/${userId}`);
                     if (response.ok) {
                         const data = await response.json();
                         if (data.messages && data.messages.length > 0) {

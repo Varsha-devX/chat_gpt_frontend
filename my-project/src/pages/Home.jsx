@@ -67,7 +67,7 @@ const Home = () => {
       const userId = localStorage.getItem("user_id");
       if (userId) {
         try {
-          const response = await fetch(`http://127.0.0.1:8000/history/${userId}`);
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/history/${userId}`);
           if (response.ok) {
             const data = await response.json();
             if (data.messages && data.messages.length > 0) {
@@ -119,7 +119,7 @@ const Home = () => {
 
     try {
       // Connect to your Backend AI
-      const response = await fetch("http://127.0.0.1:8000/ask", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/ask`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
