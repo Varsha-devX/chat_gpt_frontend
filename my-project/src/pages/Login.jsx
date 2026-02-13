@@ -4,13 +4,19 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+      const url = `${import.meta.env.VITE_API_URL}/login`;
+      console.log('Attempting login to:', url);
+      console.log('Payload:', { email, password });
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -19,7 +25,9 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Login error response:', errorData);
+        throw new Error(errorData.detail || 'Login failed');
       }
 
       const data = await response.json();
@@ -38,7 +46,9 @@ const Login = () => {
       // Redirect or update UI after login
       window.location.href = '/dashboard'; // Example redirect
     } catch (err) {
-      setError(err.message);
+      setError(err.message === "Failed to fetch" ? "Connection to backend failed. Please check your internet or if the server is up." : err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,9 +100,11 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
+              disabled={isLoading}
+              className={`w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white transition duration-150 ${isLoading ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                }`}
             >
-              Sign in
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
           </form>
         </div>

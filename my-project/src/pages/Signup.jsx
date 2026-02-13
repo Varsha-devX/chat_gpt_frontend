@@ -4,12 +4,19 @@ import { Link, useNavigate } from 'react-router-dom';
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
+        setIsLoading(true);
+        const url = `${import.meta.env.VITE_API_URL}/signup`;
+        console.log('Attempting signup to:', url);
+        console.log('Payload:', { email, password });
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/signup`, {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -17,14 +24,19 @@ const Signup = () => {
                 body: JSON.stringify({ email, password }),
             });
             if (response.ok) {
+                console.log('Signup successful');
                 // Assuming successful signup redirects to login
                 navigate('/login');
             } else {
-                console.error('Signup failed');
-                // You might want to handle error display here
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Signup error response:', errorData);
+                setError(errorData.detail || 'Signup failed');
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Network or fetch error:', error);
+            setError(error.message === "Failed to fetch" ? "Connection to backend failed." : error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -88,12 +100,16 @@ const Signup = () => {
                             </div>
                         </div>
 
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+
                         <div>
                             <button
                                 type="submit"
-                                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
+                                disabled={isLoading}
+                                className={`w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white transition duration-150 ${isLoading ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    }`}
                             >
-                                Sign up
+                                {isLoading ? "Signing up..." : "Sign up"}
                             </button>
                         </div>
                     </form>

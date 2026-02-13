@@ -147,7 +147,7 @@ const Home = () => {
       const aiId = `error-${Date.now()}`;
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `⚠️ Error: ${error.message === "Failed to fetch" ? "Connection to AI backend failed. Please ensure your local server is running on port 8000." : error.message}`, id: aiId },
+        { role: "assistant", content: `⚠️ Error: ${error.message === "Failed to fetch" ? "Connection to AI backend failed. Please try again later." : error.message}`, id: aiId },
       ]);
     } finally {
       setIsLoading(false);
